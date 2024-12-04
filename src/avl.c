@@ -15,7 +15,6 @@ struct node_ {
 
 struct avl_ {
     node *raiz;
-    int tam;
 };
 
 avl *avl_criar(void) {
@@ -23,7 +22,6 @@ avl *avl_criar(void) {
 
     if (T != NULL) {
         T->raiz = NULL;
-        T->tam = -1;
     }
 
     return T;
