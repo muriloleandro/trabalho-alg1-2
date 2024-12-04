@@ -213,7 +213,7 @@ int avl_remover(avl *T, int chave) {
 int avl_contem_aux(node *no, int chave) {
     if (no == NULL) return 0;
     if (no->chave == chave) return 1;
-    if (no->chave < chave) return avl_contem_aux(no->esq, chave);
+    if (no->chave > chave) return avl_contem_aux(no->esq, chave);
     return avl_contem_aux(no->dir, chave);
 }
 

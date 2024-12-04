@@ -19,12 +19,15 @@ int main(void) {
     avl_inserir(arvore, 55);
     avl_inserir(arvore, 51);
     avl_inserir(arvore, 100);
+    avl_remover(arvore, 51);
 
     avl_remover(arvore, 51);
     avl_remover(arvore, 3);
     avl_remover(arvore, 3);
 
     avl_imprimir(arvore);
+
+    printf("%d %d\n", avl_contem(arvore, 51), avl_contem(arvore, 100));
     avl_apagar(&arvore);
     
     return 0;
