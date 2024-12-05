@@ -17,6 +17,7 @@ struct node_ {
 
 struct llrbt_ {
     node *raiz;
+    int tam;
 };
 
 llrbt *llrbt_criar(void) {
@@ -24,6 +25,7 @@ llrbt *llrbt_criar(void) {
 
     if (T != NULL) {
         T->raiz = NULL;
+        T->tam = 0;
     }
 
     return T;
@@ -119,17 +121,18 @@ int rubro(node *no) {
     return (no->cor == RUBRO);
 }
 
-node *llrbt_inserir_aux(node *no, int chave) {
+node *llrbt_inserir_aux(node *no, int chave, llrbt *T) {
     // caso base
 	if (no == NULL) {
+        T->tam += 1;
 		return llrbt_cria_no(chave);
 	}  
  
     // inserção normal de uma ABB
     if (chave < no->chave) {
-        no->esq = llrbt_inserir_aux(no->esq, chave);
+        no->esq = llrbt_inserir_aux(no->esq, chave, T);
     } else if (chave > no->chave) {
-        no->dir = llrbt_inserir_aux(no->dir, chave);
+        no->dir = llrbt_inserir_aux(no->dir, chave, T);
     } else {   
         return no;
     }
@@ -160,10 +163,11 @@ int llrbt_inserir(llrbt *T, int chave) {
     if (T->raiz == NULL) {
         T->raiz = llrbt_cria_no(chave);
         T->raiz->cor = NEGRO;
+        T->tam += 1;
         return 1;
     }
 
-    T->raiz = llrbt_inserir_aux(T->raiz, chave);
+    T->raiz = llrbt_inserir_aux(T->raiz, chave, T);
     return 1;
 }
 
@@ -203,28 +207,30 @@ node *menor(node *no) {
     return menor(no->esq);
 }
 
-node *llrbt_remover_aux(node *no, int chave) {
+node *llrbt_remover_aux(node *no, int chave, llrbt *T) {
     if (no == NULL) return NULL;
     if (chave < no->chave) {
         if ((no->esq != NULL) && !rubro(no->esq) && !rubro(no->esq->esq)) {
             no = rubro_pra_esquerda(no);
         }
-        no->esq = llrbt_remover_aux(no->esq, chave);
+        no->esq = llrbt_remover_aux(no->esq, chave, T);
     } else {
         if (rubro(no->esq)) {
             no = rotacao_direita(no);
         }
         if (chave == no->chave && (no->dir == NULL)) {
+            T->tam -= 1;
             return NULL;
         }
         if ((no->dir != NULL) && !rubro(no->dir) && !rubro(no->dir->esq)) {
             no = rubro_pra_direita(no);
         }
         if (chave == no->chave) {
+            T->tam -= 1;
             no->chave = menor(no->dir)->chave;
             no->dir = deletar_min(no->dir);
         } else {
-            no->dir = llrbt_remover_aux(no->dir, chave);
+            no->dir = llrbt_remover_aux(no->dir, chave, T);
         }
     }
 
@@ -235,7 +241,7 @@ int llrbt_remover(llrbt *T, int chave) {
     // não pode remover nada se não houver algo para remover
     if (T == NULL || T->raiz == NULL) return 0;
 
-    T->raiz = llrbt_remover_aux(T->raiz, chave);
+    T->raiz = llrbt_remover_aux(T->raiz, chave, T);
 
     if (T->raiz == NULL) return 0;
     return 1;
@@ -267,4 +273,9 @@ void llrbt_imprimir(llrbt *T) {
         llrbt_imprimir_aux(T->raiz);
         printf("\n");
     }
+}
+
+int llrbt_tamanho(llrbt *T) {
+    if (T == NULL) return -1;
+    return T->tam;
 }

@@ -9,4 +9,5 @@
     int avl_remover(avl *T, int chave);
     int avl_contem(avl *T, int chave);
     void avl_imprimir(avl *T);
+    int avl_tamanho(avl *T);
 #endif

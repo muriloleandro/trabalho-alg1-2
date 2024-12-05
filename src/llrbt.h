@@ -9,4 +9,5 @@
     int llrbt_remover(llrbt *T, int chave);
     int llrbt_contem(llrbt *T, int chave);
     void llrbt_imprimir(llrbt *T);
+    int llrbt_tamanho(llrbt *T);
 #endif

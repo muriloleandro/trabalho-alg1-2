@@ -15,6 +15,7 @@ struct node_ {
 
 struct avl_ {
     node *raiz;
+    int tam;
 };
 
 avl *avl_criar(void) {
@@ -22,6 +23,7 @@ avl *avl_criar(void) {
 
     if (T != NULL) {
         T->raiz = NULL;
+        T->tam = 0;
     }
 
     return T;
@@ -103,13 +105,14 @@ node *rodar_direita_esquerda(node *a) {
     return rodar_esquerda(a);
 }
 
-node *avl_inserir_no(node *raiz, int chave) {
+node *avl_inserir_no(node *raiz, int chave, avl *T) {
     if (raiz == NULL) {
         raiz = avl_cria_no(chave);
+        T->tam += 1;
     } else if (chave < raiz->chave) {
-        raiz->esq = avl_inserir_no(raiz->esq, chave);
+        raiz->esq = avl_inserir_no(raiz->esq, chave, T);
     } else if (chave > raiz->chave) {
-        raiz->dir = avl_inserir_no(raiz->dir, chave);
+        raiz->dir = avl_inserir_no(raiz->dir, chave, T);
     }
 
     raiz->fb = avl_altura_no(raiz->esq) - avl_altura_no(raiz->dir);
@@ -135,7 +138,7 @@ node *avl_inserir_no(node *raiz, int chave) {
 
 int avl_inserir(avl *T, int chave) {
     if (T == NULL) return 0;
-    T->raiz = avl_inserir_no(T->raiz, chave);
+    T->raiz = avl_inserir_no(T->raiz, chave, T);
     if (T->raiz == NULL) return 0;
     return 1;
 }
@@ -156,13 +159,14 @@ void troca_max_esq(node *troca, node *raiz, node *ant) {
     troca = NULL;
 }
 
-node *avl_remover_aux(node **raiz, int chave) {
+node *avl_remover_aux(node **raiz, int chave, avl *T) {
     if (*raiz == NULL) {
         return NULL;
     }
 
     node *r = *raiz;
     if (chave == r->chave) {
+        T->tam -= 1;
         if (r->esq == NULL) {
             *raiz = r->dir;
             free(r); r = NULL;
@@ -173,9 +177,9 @@ node *avl_remover_aux(node **raiz, int chave) {
             troca_max_esq(r->esq, r, r);
         }
     } else if (chave < r->chave) {
-        r->esq = avl_remover_aux(&r->esq, chave);
+        r->esq = avl_remover_aux(&r->esq, chave, T);
     } else if (chave > r->chave) {
-        r->dir = avl_remover_aux(&r->dir, chave);
+        r->dir = avl_remover_aux(&r->dir, chave, T);
     }
 
     r = *raiz;
@@ -204,7 +208,7 @@ node *avl_remover_aux(node **raiz, int chave) {
 
 int avl_remover(avl *T, int chave) {
     if (T == NULL) return 0;
-    T->raiz = avl_remover_aux(&T->raiz, chave);
+    T->raiz = avl_remover_aux(&T->raiz, chave, T);
     return 1;
 }
 
@@ -234,4 +238,9 @@ void avl_imprimir(avl *T) {
         avl_imprimir_aux(T->raiz);
         printf("\n");
     }
+}
+
+int avl_tamanho(avl *T) {
+    if (T == NULL) return -1;
+    return T->tam;
 }
