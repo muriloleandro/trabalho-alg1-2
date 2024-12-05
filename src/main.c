@@ -1,34 +1,40 @@
 #include <stdio.h>
-#include "avl.h"
+#include "llrbt.h"
 
 int main(void) {
-    avl *arvore = avl_criar();
+    llrbt *arvore = llrbt_criar();
     // 10, 5, 20, 1, 3, 4, 8, 30, 40, 35, 50, 45, 55, 51, 100
-    avl_inserir(arvore, 10);
-    avl_inserir(arvore, 5);
-    avl_inserir(arvore, 20);
-    avl_inserir(arvore, 1);
-    avl_inserir(arvore, 3);
-    avl_inserir(arvore, 4);
-    avl_inserir(arvore, 8);
-    avl_inserir(arvore, 30);
-    avl_inserir(arvore, 40);
-    avl_inserir(arvore, 35);
-    avl_inserir(arvore, 50);
-    avl_inserir(arvore, 45);
-    avl_inserir(arvore, 55);
-    avl_inserir(arvore, 51);
-    avl_inserir(arvore, 100);
-    avl_remover(arvore, 51);
+    llrbt_inserir(arvore, 10);
+    llrbt_inserir(arvore, 5);
+    llrbt_inserir(arvore, 20);
+    llrbt_inserir(arvore, 1);
+    llrbt_inserir(arvore, 3);
+    llrbt_inserir(arvore, 4);
+    llrbt_inserir(arvore, 8);
+    llrbt_inserir(arvore, 30);
+    llrbt_inserir(arvore, 40);
+    llrbt_inserir(arvore, 35);
+    llrbt_inserir(arvore, 50);
+    llrbt_inserir(arvore, 45);
+    llrbt_inserir(arvore, 55);
+    llrbt_inserir(arvore, 51);
+    llrbt_inserir(arvore, 100);
 
-    avl_remover(arvore, 51);
-    avl_remover(arvore, 3);
-    avl_remover(arvore, 3);
+    llrbt_imprimir(arvore);
+    printf("%d %d %d\n", llrbt_contem(arvore, 51), llrbt_contem(arvore, 100), llrbt_contem(arvore, 69));
 
-    avl_imprimir(arvore);
+    llrbt_remover(arvore, 100);
+    llrbt_remover(arvore, 55);
+    llrbt_remover(arvore, 55);
+    llrbt_remover(arvore, 30);
+    llrbt_remover(arvore, 30);
+    llrbt_remover(arvore, 1);
+    llrbt_remover(arvore, 1);
 
-    printf("%d %d\n", avl_contem(arvore, 51), avl_contem(arvore, 100));
-    avl_apagar(&arvore);
+    llrbt_imprimir(arvore);
+    printf("%d %d %d\n", llrbt_contem(arvore, 51), llrbt_contem(arvore, 100), llrbt_contem(arvore, 69));
+
+    llrbt_apagar(&arvore);
     
     return 0;
 }
