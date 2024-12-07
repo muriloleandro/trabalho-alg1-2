@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "sets.h"
 
-int main (void){//tem que ter 'int *argc, char *argv[]';
+int main (void){
     SET *A, *B;
     int tamA, tamB;
     int comando; //comando para o tipo de operação desejada pelo usuário;
