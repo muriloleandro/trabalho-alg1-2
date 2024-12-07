@@ -37,10 +37,10 @@
 
     //retornará um ponteiro para uma terceira àrvore (do tipo llrbt) que contém a união dos elementos contidos nas duas llrbt's no argumento da função, criando-a e
     //preenchendo-a na própria função;
-    //COMPLEXIDADE = 
+    //COMPLEXIDADE = O(n + t) [sendo 't' o tamanho da àrvore B, e 'n' o da A];
     llrbt *llrbt_uniao(llrbt *A, llrbt *B);
 
     //retorna ponteiro para llrbt cujos elementos são introduzidos via o critério de pertencerem simultaneamente às árvores A e B;
-    //COMPLEXIDADE = 
+    //COMPLEXIDADE = O(n + nlog(n)); 
     llrbt *llrbt_interseccao(llrbt *A, llrbt *B);
 #endif
