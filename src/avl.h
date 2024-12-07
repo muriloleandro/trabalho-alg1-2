@@ -10,4 +10,6 @@
     int avl_contem(avl *T, int chave);
     void avl_imprimir(avl *T);
     int avl_tamanho(avl *T);
+    avl *avl_uniao(avl *A, avl *B);
+    avl *avl_interseccao(avl *A, avl *B);
 #endif

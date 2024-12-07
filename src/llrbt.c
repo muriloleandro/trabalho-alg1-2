@@ -121,6 +121,25 @@ int rubro(node *no) {
     return (no->cor == RUBRO);
 }
 
+node *consertar(node *no) {
+    // caso 1
+    if (rubro(no->dir) && !rubro(no->esq)) {
+        no = rotacao_esquerda(no);
+    }
+     
+    // caso 2
+    if (rubro(no->esq) && rubro(no->esq->esq)) {   
+        no = rotacao_direita(no);
+    }
+    
+    // caso 3
+    if (rubro(no->esq) && rubro(no->dir)) {
+        inverter(no);
+    }
+
+    return no;
+}
+
 node *llrbt_inserir_aux(node *no, int chave, llrbt *T) {
     // caso base
 	if (no == NULL) {
@@ -138,22 +157,7 @@ node *llrbt_inserir_aux(node *no, int chave, llrbt *T) {
     }
     
     // balanceamento
-
-    // caso 1
-    if (rubro(no->dir) && !rubro(no->esq)) {
-        no = rotacao_esquerda(no);
-    }
-     
-    // caso 2
-    if (rubro(no->esq) && rubro(no->esq->esq)) {   
-        no = rotacao_direita(no);
-    }
-    
-    // caso 3
-    if (rubro(no->esq) && rubro(no->dir)) {
-        inverter(no);
-    }
- 
+    no = consertar(no);
     return no;
 }
 
@@ -197,7 +201,7 @@ node *deletar_min(node *no) {
         no = rubro_pra_esquerda(no);
     }
     no->esq = deletar_min(no->esq);
-    return no;
+    return consertar(no);
 }
 
 // anda para a esquerda até chegar no final da árvore, obtendo a menor chave
@@ -234,7 +238,7 @@ node *llrbt_remover_aux(node *no, int chave, llrbt *T) {
         }
     }
 
-    return no;
+    return consertar(no);
 }
 
 int llrbt_remover(llrbt *T, int chave) {
@@ -278,4 +282,77 @@ void llrbt_imprimir(llrbt *T) {
 int llrbt_tamanho(llrbt *T) {
     if (T == NULL) return -1;
     return T->tam;
+}
+
+/*
+  temos que percorrer uma árvore para comparar seus elementos
+  aos da outra; para isso, será usada a in-order traversal,
+  por nenhum motivo em especial (a post-order e pre-order
+  também percorrem a árvore inteira);
+*/
+void llrbt_intersseccao_aux(llrbt *arvore, node *raiz, llrbt *inter){
+    if (raiz != NULL){
+        llrbt_intersseccao_aux(arvore, raiz->esq, inter);
+        
+        int elemento = raiz->chave;
+
+        // somente inserimos caso o elemento esteja presente em
+        // AMBOS os conjuntos, isto é, armazenado em AMBAS as estruturas de dados;
+        if (llrbt_contem(arvore, elemento) == 1){
+            llrbt_inserir(inter, elemento);
+        }
+
+        llrbt_intersseccao_aux(arvore, raiz->dir, inter);
+    }
+}
+
+llrbt *llrbt_interseccao(llrbt *A, llrbt *B){
+    // não será possível efetuar a operação 'união'
+    // caso um dos sets (ou ambos) não exista;
+    if ((A == NULL) || (B == NULL)){
+        return NULL;
+    }
+
+    // àrvore llrbt que guardará os conjuntos da união;
+    llrbt *intersseccao = llrbt_criar();
+
+    /*
+      no caso da interssecção, para economizar tempo de operação,
+      faz mais sentido percorrer o menor conjunto entre os dois,
+      dado que o set da interssecção terá, no máximo,
+      um número de elementos equivalente ao do menor entre ambos;
+    */
+    if ((A->tam) >= (B->tam)) {
+        llrbt_intersseccao_aux(A, B->raiz, intersseccao);
+    } else {
+        llrbt_intersseccao_aux(B, A->raiz, intersseccao);
+    }
+
+    return intersseccao;
+}
+
+void llrbt_uniao_aux(node *raiz, llrbt *uniao){
+    if (raiz != NULL) {
+        llrbt_uniao_aux(raiz->esq, uniao);
+        llrbt_inserir(uniao, raiz->chave);
+        llrbt_uniao_aux(raiz->dir, uniao);
+    }
+} 
+
+llrbt *llrbt_uniao(llrbt *A, llrbt *B){
+    if ((A == NULL) || (B == NULL)){
+        return NULL;
+    }
+
+    llrbt *uniao = llrbt_criar();
+
+    /*
+      ideia básica: percorrer ambos os sets e ir inserindo os elementos em uniao;
+      do modo como as estruturas de dados operam, se um elemento já estiver inserido,
+      o set uniao meramente não mudará, evitando a repetição de elementos;
+    */
+    llrbt_uniao_aux(A->raiz, uniao);
+    llrbt_uniao_aux(B->raiz, uniao);
+
+    return uniao;
 }

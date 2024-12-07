@@ -10,4 +10,6 @@
     int llrbt_contem(llrbt *T, int chave);
     void llrbt_imprimir(llrbt *T);
     int llrbt_tamanho(llrbt *T);
+    llrbt *llrbt_uniao(llrbt *A, llrbt *B);
+    llrbt *llrbt_interseccao(llrbt *A, llrbt *B);
 #endif

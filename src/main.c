@@ -1,23 +1,97 @@
 #include <stdio.h>
-#include "avl.h"
-#include "llrbt.h"
+#include <stdlib.h>
+#include "sets.h"
 
-int main(void) {
-    llrbt *arvore = llrbt_criar();
-    // 10, 5, 20, 1, 3, 4, 8, 30, 40, 35, 50, 45, 55, 51, 100
-    llrbt_inserir(arvore, 10);
-    llrbt_inserir(arvore, 5);
-    llrbt_inserir(arvore, 20);
-    llrbt_inserir(arvore, 1);
-    llrbt_inserir(arvore, 3);
-    llrbt_inserir(arvore, 4);
+int main (void){//tem que ter 'int *argc, char *argv[]';
+    SET *A, *B;
+    int tamA, tamB;
+    int comando; //comando para o tipo de operação desejada pelo usuário;
+    int tipo_arv; //0 = left_leaning_red black_tree; 1 = AVL_tree;
+    int aux; //variável temporária, para armazenar os números que serão guardados nos conjuntos;
 
-    llrbt_remover(arvore, 20);
-    llrbt_remover(arvore, 4);
+    scanf ("%d", &tipo_arv);
 
-    llrbt_imprimir(arvore);
-    printf("Tamanho: %d\n", llrbt_tamanho(arvore));
-    llrbt_apagar(&arvore);
-    
+    A = criar_set (tipo_arv);
+    B = criar_set (tipo_arv);
+
+    scanf ("%d %d", &tamA, &tamB);
+
+    //lendo o conteúdo dos conjuntos;
+    for(int i = 0; i < tamA; i++){
+        scanf("%d", &aux);
+        set_inserir(A, aux);
+    }
+
+    for(int i=0; i < tamB; i++){
+        scanf("%d",&aux);
+        set_inserir(B, aux);
+
+    }
+
+    scanf ("%d", &comando);
+
+    switch (comando){//usamos as operações básicas do TAD conjuntos para efetuar as operações específicas;
+        case (1):{//pertence;
+            int elemento;
+            scanf ("%d", &elemento);
+
+            if (set_pertence (A, elemento) == 1){
+                printf ("Pertence\n");
+            }else{
+                printf ("Nao pertence\n");
+            }
+
+            break;
+        }
+        case (2):{//união;
+            SET *uniao;
+
+            if (tipo_arv == 1){
+                uniao = criar_set (1);
+            }else{
+                uniao = criar_set (0);
+            }
+
+            uniao = set_uniao (A, B);
+
+            set_imprimir (uniao);
+
+            set_apagar (&uniao);
+
+            break;
+        }
+        case (3):{//interssecção;
+            SET *inter;
+
+            if (tipo_arv == 1){
+                inter = criar_set (1);
+            }else{
+                inter = criar_set (0);
+            }
+
+            inter = set_interseccao (A, B);
+
+            set_imprimir (inter); 
+
+            set_apagar (&inter);
+
+            break;
+        }
+        case (4):{//remoção;
+            int elemento;
+            scanf ("%d", &elemento);
+
+            set_remover (A, elemento);
+
+            set_imprimir (A);
+
+            break;
+        }
+
+    }
+
+    set_apagar (&A);
+    set_apagar (&B);
+
     return 0;
 }
