@@ -1,6 +1,9 @@
 import glob
 import subprocess
 
+failed = []
+worked = []
+
 for filename in glob.glob("./cases/*.in"):
     fin = open(filename, 'r')
     fout = open(filename.replace('.in', '.out'), 'r')
@@ -9,9 +12,14 @@ for filename in glob.glob("./cases/*.in"):
 
     p = subprocess.run(['./bin/main'], input=inp, capture_output=True, text=True)
     if p.stdout == out or p.stdout+'\n' == out:
-        print(filename, 'OK')
+        worked.append(filename)
     else:
-        print(filename, 'FALHOU !!!')
+        failed.append(filename)
 
     fin.close()
     fout.close()
+
+print(f'Passed: {len(worked)}')
+print(f'Failed: {len(failed)}')
+for fail in failed:
+    print(fail)
