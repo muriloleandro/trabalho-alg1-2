@@ -47,7 +47,8 @@ SET *set_uniao (SET *A, SET *B);
 
 //é produzido um set interssecção contendo os elementos comuns de A e B, que é o output da função; percorre-se o menor set dentre os dois,
 //inserindo seus elemento se e somente se eles estiverem presentes no outro set; desse modo, será sempre necessário percorre uma árvore por completo,
-//e a outra, um número de vezes equivalente ao tamanho da primeira
+//e a outra, um número de vezes equivalente ao tamanho da primeira;
+//COMPLEXIDADE: O(n + nlog(n));
 SET *set_interseccao (SET *A, SET *B);
   
 #endif
