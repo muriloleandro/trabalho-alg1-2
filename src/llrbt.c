@@ -2,14 +2,15 @@
 #include <stdio.h>
 #include "llrbt.h"
 
-//retornando o máx entre dois dados do tipo int;
+// retornando o máx entre dois dados do tipo int;
 #define max(a, b) ((a > b) ? a : b)
 #define RUBRO 1
 #define NEGRO 0
 
 typedef struct node_ node;
 
-//o nó da llrbt precisa guardar a cor da aresta que seu pai incide sobre ele, ponteiros para seus 2 filhos, e o conteúdo (chave);
+// o nó da llrbt precisa guardar a cor da aresta que seu pai incide sobre ele,
+// ponteiros para seus 2 filhos, e o conteúdo (chave);
 struct node_ {
     node *esq;
     node *dir;
@@ -19,14 +20,16 @@ struct node_ {
 
 struct llrbt_ {
     node *raiz;
-    int tam; //número de nós na àrvore;
+    int tam; // número de nós na àrvore;
 };
 
-//retorna ponteiro para uma struct 'llrbt', devidamente alocada;
+// retorna ponteiro para uma struct 'llrbt', devidamente alocada;
 llrbt *llrbt_criar(void) {
     llrbt *T = malloc(sizeof(llrbt));
 
-    if (T != NULL) {//manejo adequado da memória: checando se a alocação foi bem sucedida ou não;
+    if (T != NULL) {
+        // manejo adequado da memória:
+        // checando se a alocação foi bem sucedida ou não;
         T->raiz = NULL;
         T->tam = 0;
     }
@@ -35,7 +38,8 @@ llrbt *llrbt_criar(void) {
 }
 
 void llrbt_apagar_no(node **no) {
-//apaga-se pai, e propaga-se recursivamente a deleção para os filhos, sendo que o ciclo acaba nas folhas NULLs da llrbt;
+    // apaga-se pai, e propaga-se recursivamente a deleção para os filhos,
+    // sendo que o ciclo acaba nas folhas NULLs da llrbt;
     if (*no == NULL) {
         return;
     }
@@ -49,7 +53,9 @@ void llrbt_apagar_no(node **no) {
 
 void llrbt_apagar(llrbt **T) {
     llrbt_apagar_no(&((*T)->raiz));
-    free(*T); //liberando também na memória o espaço alocado para a struct 'llrbt', apontado pelo ponteiro *T;
+    free(*T);
+    // liberando também na memória o espaço alocado para a struct 'llrbt',
+    // que é apontado pelo ponteiro *T;
     *T = NULL;
 }
 
@@ -60,7 +66,8 @@ node *llrbt_cria_no(int chave) {
         no->dir = NULL;
         no->esq = NULL;
         no->chave = chave;
-        no->cor = RUBRO; //segundo as regras da ED, todo nó é criado com uma aresta rubra/
+        no->cor = RUBRO;
+        // segundo as regras da ED, todo nó é criado com uma aresta rubra
     }
 
     return no;
@@ -122,15 +129,20 @@ void inverter(node *no) {
     if (no->dir != NULL) no->dir->cor = !no->dir->cor;
 }
 
-// checa se um nó é vermelho, valida casos que nó é NULL (se for, retorna que sua aresta é negra);
+// checa se um nó é vermelho, valida casos que nó é NULL
+// (se for null, retorna que sua aresta é negra);
 int rubro(node *no) {
     if (no == NULL) return 0;
     return (no->cor == RUBRO);
 }
 
-//a função consertar tem como papel ajustar a àrvore para que, na volta das chamadas recursivas nas funções 'inserir()' e 'remover()', cada nó 
-//que foi atravessado seja analisado para ver se as mudanças que a inserção e a remoção trouxeram afetaram as propriedades de balanceamento da llrbt,
-//caso esse em que rotações e inversões serão utilizados para garantir a preservação delas; 
+/*
+  a função consertar tem como papel ajustar a àrvore para que, na volta das
+  chamadas recursivas nas funções 'inserir()' e 'remover()', cada nó  que foi
+  atravessado seja analisado para ver se as mudanças que a inserção e a remoção
+  trouxeram afetaram as propriedades de balanceamento da llrbt, caso esse em que
+  rotações e inversões serão utilizados para garantir a preservação delas; 
+*/
 node *consertar(node *no) {
     // caso 1
     if (rubro(no->dir) && !rubro(no->esq)) {
@@ -154,7 +166,7 @@ node *llrbt_inserir_aux(node *no, int chave, llrbt *T) {
     // caso base
     if (no == NULL) {
         T->tam += 1;
-	return llrbt_cria_no(chave);
+	    return llrbt_cria_no(chave);
 	}  
  
     // inserção normal de uma ABB;
@@ -185,9 +197,13 @@ int llrbt_inserir(llrbt *T, int chave) {
     return 1;
 }
 
-//as funções 'rubro_pra_esquerda' e 'rubro_pra_direita' garantem a propagação da aresta rubra pelos nós conforme as chamadas recursivas para remoção ocorrem 
-//(respectivamente, para o nó-fiho esquerdo e direito), dado que somente removem-se nós com incidência rubra; para esse fim, é necessário, em cada uma das 2, 
-//checar com qual caso se está lidando, a fim de se decidir o que fazer;
+/*
+  as funções 'rubro_pra_esquerda' e 'rubro_pra_direita' garantem a propagação da
+  aresta rubra pelos nós conforme as chamadas recursivas para remoção ocorrem 
+  (respectivamente, para o nó-fiho esquerdo e direito), dado que somente removem-se
+  nós com incidência rubra; para esse fim, é necessário, em cada uma das 2, 
+  checar com qual caso se está lidando, a fim de se decidir o que fazer;
+*/
 node *rubro_pra_esquerda(node *no) {
     inverter(no);
     if ((no->dir != NULL) && rubro(no->dir->esq)) {
@@ -207,11 +223,17 @@ node *rubro_pra_direita(node *no) {
     return no;
 }
 
-//tal qual na ABB padrão, aplica-se essa função para remover da sub-àrvore direita (do nó cuja chave deseja-se remover) o nó
-//cuja chave foi trocada, respeitando-se a propagação do nó vermelho até a aresta a ser removida;
+/*
+  tal qual na ABB padrão, aplica-se essa função para remover da sub-àrvore direita
+  (do nó cuja chave deseja-se remover) o nó cuja chave foi trocada, respeitando-se
+  a propagação do nó vermelho até a aresta a ser removida;
+*/
 node *deletar_min(node *no) {
     if (no == NULL) return NULL;
-    if (no->esq == NULL) return NULL;
+    if (no->esq == NULL) {
+        llrbt_apagar_no(&no);
+        return NULL;
+    }
     if (!rubro(no->esq) && !rubro(no->esq->esq)) {
         no = rubro_pra_esquerda(no);
     }
@@ -219,8 +241,8 @@ node *deletar_min(node *no) {
     return consertar(no);
 }
 
-// anda para a esquerda até chegar no final da árvore, obtendo a menor chave; aplicado para a remoção no caso em que 
-// há 2 subàrvores;
+// anda para a esquerda até chegar no final da árvore, obtendo a menor chave;
+// aplicado para a remoção no caso em que há 2 subàrvores;
 node *menor(node *no) {
     if (no == NULL) return NULL;
     if (no->esq == NULL) return no;
@@ -230,31 +252,40 @@ node *menor(node *no) {
 node *llrbt_remover_aux(node *no, int chave, llrbt *T) {
     if (no == NULL) return NULL;
     if (chave < no->chave) {
+        // direção a ser propagada a aresta rubra = esquerda;
         if ((no->esq == NULL) || (!rubro(no->esq) && !rubro(no->esq->esq))) {
             no = rubro_pra_esquerda(no);
         }
         no->esq = llrbt_remover_aux(no->esq, chave, T);
-    } else {//ou achamos o nó, ou vamos à direita agora;
-        if (rubro(no->esq)) {//propagando a aresta rubra pra direita;
+    } else {
+        // ou achamos o nó, ou vamos à direita agora;
+        if (rubro(no->esq)) {
+            // propagando a aresta rubra pra direita;
             no = rotacao_direita(no);
         }
-        if (chave == no->chave && (no->dir == NULL)) {//chegou-se na extremidade esquerda da àrvore (retorna NULL após apagar o nó); 
-            T->tam -= 1;//CORRIGE AQUI MURILÃO!
+        if (chave == no->chave && (no->dir == NULL)) {
+            // chegou-se na extremidade esquerda da àrvore (retorna NULL após apagar o nó);
+            llrbt_apagar_no(&no);
+            T->tam -= 1;
             return NULL;
         }
         if ((no->dir == NULL) || (!rubro(no->dir) && !rubro(no->dir->esq))) {
+            // garantindo novamente que a aresta rubra será propagada à direita;
             no = rubro_pra_direita(no);
         }
-        if (chave == no->chave) {//removendo o nó e ajustando a àrvore se necessário (tal qual ABB, 3 casos de remoção);
+        if (chave == no->chave) {
+            // removendo o nó e ajustando a àrvore se necessário (tal qual ABB, 3 casos de remoção);
             T->tam -= 1;
             no->chave = menor(no->dir)->chave;
             no->dir = deletar_min(no->dir);
         } else {
-            no->dir = llrbt_remover_aux(no->dir, chave, T);//indo à direita da àrvore;
+            // indo à direita da àrvore;
+            no->dir = llrbt_remover_aux(no->dir, chave, T);
         }
     }
 
-    //arrumando a àrvore na volta da recursão, rebalanceando-a após alterarmos toda sua estrutura para propagar a aresta rubra;	
+    // arrumando a àrvore na volta da recursão, rebalanceando-a após
+    // alterarmos toda sua estrutura para propagar a aresta rubra;	
     return consertar(no);
 }
 
@@ -268,8 +299,8 @@ int llrbt_remover(llrbt *T, int chave) {
     return 1;
 }
 
-//recursivamente vai propagando a busca por um caminho na àrvore, até cair em um dois 2 casos-base: encontrou (retorna 1)
-//ou não (retorna 0);
+// recursivamente vai propagando a busca por um caminho na àrvore,
+// até cair em um dois 2 casos-base: encontrou (retorna 1) ou não (retorna 0);
 int llrbt_contem_aux(node *no, int chave) {
     if (no == NULL) return 0;
     if (no->chave == chave) return 1;
@@ -283,7 +314,7 @@ int llrbt_contem(llrbt *T, int chave) {
     return llrbt_contem_aux(T->raiz, chave);
 }
 
-//imprime o contéudo dos nós em order, devido ao in-order-traversal da llrbt;
+// imprime o contéudo dos nós em order, devido ao in-order-traversal da llrbt;
 void llrbt_imprimir_aux(node *no) {
     if (no != NULL) {
         llrbt_imprimir_aux(no->esq);
@@ -299,7 +330,7 @@ void llrbt_imprimir(llrbt *T) {
     }
 }
 
-//retorna a quantidade de nós na àrvore;
+// retorna a quantidade de nós na àrvore;
 int llrbt_tamanho(llrbt *T) {
     if (T == NULL) return -1;
     return T->tam;
