@@ -19,11 +19,12 @@ run:
 	./bin/main
 
 clean:
-	rm obj/* bin/*
+	rm obj/*.o
+	rm bin/*
 
 valgrind:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./bin/main
 
 zip:
-	if test -f "source.zip"; then rm source.zip; fi
-	zip source.zip Makefile src/* bin obj
+	if test -f "Murilo_Glauco.zip"; then rm Murilo_Glauco.zip; fi
+	zip -r Murilo_Glauco.zip . -x '*.git*' -x 'bin/main' -x 'obj/*.o' -x 'valgrind-out.txt'
