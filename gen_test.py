@@ -14,7 +14,7 @@ def gen(n):
     B_ = list(B)
     B_.sort()
 
-    op = random.randint(1, 5)
+    op = random.randint(1, 4)
 
     fin = open('cases/{}.in'.format(n), 'w')
     fout = open('cases/{}.out'.format(n), 'w')
