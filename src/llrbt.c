@@ -179,7 +179,7 @@ node *rubro_pra_esquerda(node *no) {
     inverter(no);
     if ((no->dir != NULL) && rubro(no->dir->esq)) {
         no->dir = rotacao_direita(no->dir);
-        no = rotacao_direita(no);
+        no = rotacao_esquerda(no);
         inverter(no);
     }
     return no;
@@ -214,7 +214,7 @@ node *menor(node *no) {
 node *llrbt_remover_aux(node *no, int chave, llrbt *T) {
     if (no == NULL) return NULL;
     if (chave < no->chave) {
-        if ((no->esq != NULL) && !rubro(no->esq) && !rubro(no->esq->esq)) {
+        if ((no->esq == NULL) || (!rubro(no->esq) && !rubro(no->esq->esq))) {
             no = rubro_pra_esquerda(no);
         }
         no->esq = llrbt_remover_aux(no->esq, chave, T);
@@ -226,7 +226,7 @@ node *llrbt_remover_aux(node *no, int chave, llrbt *T) {
             T->tam -= 1;
             return NULL;
         }
-        if ((no->dir != NULL) && !rubro(no->dir) && !rubro(no->dir->esq)) {
+        if ((no->dir == NULL) || (!rubro(no->dir) && !rubro(no->dir->esq))) {
             no = rubro_pra_direita(no);
         }
         if (chave == no->chave) {
@@ -267,7 +267,7 @@ int llrbt_contem(llrbt *T, int chave) {
 void llrbt_imprimir_aux(node *no) {
     if (no != NULL) {
         llrbt_imprimir_aux(no->esq);
-        printf("%d ", no->chave);
+        printf("%d, ", no->chave);
         llrbt_imprimir_aux(no->dir);
     }
 }
