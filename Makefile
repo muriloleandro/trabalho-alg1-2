@@ -5,7 +5,7 @@ CFLAGS := -std=c99 -Wall # $(DEBUG)
 SRC := $(wildcard src/*.c)
 OBJ := $(SRC:src/%.c=obj/%.o)
 
-.PHONY: all run clean valgrind zip
+.PHONY: all run clean valgrind zip relatorio
 
 all: bin/main
 
@@ -28,3 +28,6 @@ valgrind:
 zip:
 	if test -f "Murilo_Glauco.zip"; then rm Murilo_Glauco.zip; fi
 	zip -r Murilo_Glauco.zip . -x '*.git*' -x 'bin/main' -x 'obj/*.o' -x 'valgrind-out.txt'
+
+relatorio:
+	pdflatex -output-directory=relatorio relatorio/relatorio.tex
