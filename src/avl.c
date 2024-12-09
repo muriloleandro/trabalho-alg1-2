@@ -194,6 +194,7 @@ int avl_inserir(avl *T, int chave) {
 void troca_max_esq(node *troca, node *raiz, node *ant) {
     if (troca->dir != NULL) {
         troca_max_esq(troca->dir, raiz, troca);
+        return;
     }
 
     if (raiz == ant) {
