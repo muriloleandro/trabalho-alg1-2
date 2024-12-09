@@ -42,13 +42,13 @@ void set_imprimir (SET *S);
 //recebe como argumento os sets A e B, produzindo um set novo (o qual será retornado) que contém a união de ambos os conjuntos de input;
 //'set_uniao' funciona ao percorrer os dois, aplicando uma função de inserção para cada elemento, inserindo-o caso ele não esteja presente
 //em 'uniao', ou não o fazendo, do contrário;
-//COMPLEXIDADE: O(n + t)    ['t' = número de elementos do set B]
+//COMPLEXIDADE: O((n + t)*log(n*t))   ['t' = número de elementos do set B]
 SET *set_uniao (SET *A, SET *B);
 
 //é produzido um set interssecção contendo os elementos comuns de A e B, que é o output da função; percorre-se o menor set dentre os dois,
 //inserindo seus elemento se e somente se eles estiverem presentes no outro set; desse modo, será sempre necessário percorre uma árvore por completo,
 //e a outra, um número de vezes equivalente ao tamanho da primeira;
-//COMPLEXIDADE: O(n + nlog(n));
+//COMPLEXIDADE: O(nlog(t) + log(k))    ['t' = número de elementos do set B; 'k' = número de elementos do novo set];
 SET *set_interseccao (SET *A, SET *B);
   
 #endif
