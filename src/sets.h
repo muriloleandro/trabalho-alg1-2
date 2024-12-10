@@ -38,7 +38,8 @@
     'set_inserir' tem como objetivo inserir um elemento em um set 
     não nulo; caso isso não seja bem-sucedido, a função retornará 
     falso; do contrário, ela retornará verdadeiro; como, para esse
-    fim, é necessário efetuar uma busca, 
+    fim, é necessário efetuar uma busca, e a inserção é de complexidade
+    constante, o big Oh será idêntico ao de 'set_pertence';
 
     COMPLEXIDADE: O(log(n));
     */
