@@ -47,12 +47,19 @@ $O(3 \cdot 2 \log_2 n + 1) = O(\log n)$ para inserir o nó e rebalancear.
 
 \subsection{União}
 O algoritmo tanto para o caso da AVL quanto para o caso da LLRBT baseia-se em:
-Criar um conjunto C e inserir todos os elementos dos conjuntos de entrada (A e B). Para inserir todos elementos de um
-conjunto, a árvore é percorrida em-ordem e para cada nó visitado, é inserido sua chave na árvore do conjunto C.
+Criar um conjunto $C$ e inserir todos os elementos dos conjuntos de entrada ($A$ e $B$). Para inserir todos elementos de um
+conjunto, a árvore é percorrida em-ordem e para cada nó visitado, é inserido sua chave na árvore do conjunto $C$.
 
 Assim, chamando $n = |A|$ e $m = |B|$, percorrer-se-ão todos os $n+m$ nós, e para cada um dos nós, será feita uma inserção
 de complexidade $O(\log(n+m))$. A complexidade total do algoritmo será portanto $O((n+m)\log(n+m))$.
 
 \subsection{Intersecção}
+O algoritmo de intersecção também tem a mesma estrutura para ambos as estruturas de dados. É criado um conjunto $C$, e percorre-se
+o conjunto de entrada $A$ (da mesma forma que a anterior, usando recursão em-ordem). Para cada elemento de $A$, é checado se ele
+também está contido em $B$. Caso seja, ele é inserido em $C$.
+Assim, são percorridos $n$ elementos, e para cada um, a checagem de pertencimento em $B$ tem complexidade $O(\log m)$ mais a 
+complexidade de inserção, que também é logaritimica. No final, a complexidade da intersecção é $O(n\log m)$  
+
+\section{Outras operações do conjunto}
 
 \end{document}

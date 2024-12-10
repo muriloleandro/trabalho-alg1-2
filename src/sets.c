@@ -63,7 +63,8 @@ bool set_pertence(SET *S, int elemento) {
 
 // o booleano anuncia o sucesso ou fracasso da inserção;
 bool set_inserir(SET *S, int elemento) {
-    // se o set não existe, a inserção não será possível, e, portanto, retornará false; 
+    // se o set não existe, a inserção não será possível, e, portanto,
+    // retornará false; 
     if (S == NULL) {
         return false;
     }
@@ -134,7 +135,8 @@ void set_imprimir(SET *S) {
 }
 
 SET *set_uniao(SET *A, SET *B) {
-    // checando, obviamente, se ambos os sets existem de fato antes de tentar uni-los;
+    // checando, obviamente, se ambos os sets existem de fato antes de 
+    // tentar uni-los;
     if ((A == NULL) || (B == NULL)) {
         return NULL;
     }
