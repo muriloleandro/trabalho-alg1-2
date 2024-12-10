@@ -155,7 +155,10 @@ node *avl_inserir_no(node *raiz, int chave, avl *T) {
     }
 
     //cálculo do novo fb dos nós, a fim de rotacionar conforme necessário;
-    raiz->fb = avl_altura_no(raiz->esq) - avl_altura_no(raiz->dir);
+    int he = avl_altura_no(raiz->esq);
+    int hd = avl_altura_no(raiz->dir);
+    raiz->altura = 1+max(he, hd);
+    raiz->fb = he - hd;
 
     if (raiz->fb == -2) {
         if (raiz->dir->fb <= 0) {
@@ -246,7 +249,10 @@ node *avl_remover_aux(node **raiz, int chave, avl *T) {
     }
 
     // rebalanceamento necessário no back-tracking pela àrvore;
-    r->fb = avl_altura_no(r->esq) - avl_altura_no(r->dir);
+    int he = avl_altura_no(r->esq);
+    int hd = avl_altura_no(r->dir);
+    r->altura = 1+max(he, hd);
+    r->fb = he - hd;
     if (r->fb == 2) {
         if (r->esq->fb >= 0) {
             *raiz = rodar_direita(r);
@@ -256,7 +262,7 @@ node *avl_remover_aux(node **raiz, int chave, avl *T) {
     }
     if (r->fb == -2) {
         if (r->dir->fb <= 0) {
-            *raiz = rodar_direita(r);
+            *raiz = rodar_esquerda(r);
         } else {
             *raiz = rodar_direita_esquerda(r);
         }
