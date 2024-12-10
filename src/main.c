@@ -16,7 +16,7 @@ int main (void) {
 
     scanf("%d %d", &tamA, &tamB);
 
-    //lendo o conteúdo dos conjuntos;
+    // lendo o conteúdo dos conjuntos;
     for(int i = 0; i < tamA; i++){
         scanf("%d", &aux);
         set_inserir(A, aux);
@@ -74,6 +74,7 @@ int main (void) {
     }
     }
 
+    // removendo os 2 sets criados;
     set_apagar(&A);
     set_apagar(&B);
 

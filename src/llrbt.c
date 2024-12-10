@@ -74,25 +74,22 @@ node *llrbt_cria_no(int chave) {
 }
 
 /* 
-  Rotação Esquerda, diagrama de cada linha:
-  dir->esq = no;
-      no             no
-     /  \           /  \
-    X    dir   =>  X    dir   ==     dir
-        /   \          /   \        /   \
-     dir_esq Y        no    Y      no    Y
-                                  /  \
-                                 X   dir[...]
+  rotação esquerda:
+      a                b
+     / \              / \
+    X    b    =>     a   W
+        / \         / \
+       Y   W       X   Y 
 
-  no->dir = dir_esq;
-      dir                 dir
-     /   \               /   \
-    no    Y     =>      no    Y
-   /  \                /  \
-  X   dir[...]        X   dir_esq
+  rotação direita:
+      a          b
+     / \        / \
+    b   W  =>  X   a 
+   / \            / \
+  X   Y          Y   W
 
  É importante também ressaltar que, quando rotacionamos nesse tipo de àrvore, as cores das arestas que ligam os nós permanecem
-as mesmas que anteriormente, isto é, se na rotacao A e B são trocados de posição, a aresta que os liga e as que os ligam aos demais
+as mesmas que anteriormente, isto é, se na rotação A e B são trocados de posição, a aresta que os liga e as que os ligam aos demais
 nós preservam suas cores originais;
 */
 node *rotacao_esquerda(node  *no) {

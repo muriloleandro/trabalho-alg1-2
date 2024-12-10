@@ -94,6 +94,22 @@ node *avl_cria_no(int chave) {
   considerando o fato de serem somente um conjunto de operações fixas que tomam tempo
   constante, repetidas sempre que a função é chamada;
 */
+
+/*
+  rotação esquerda:
+      a                b
+     / \              / \
+    X    b    =>     a   W
+        / \         / \
+       Y   W       X   Y 
+
+  rotação direita:
+      a          b
+     / \        / \
+    b   W  =>  X   a 
+   / \            / \
+  X   Y          Y   W
+*/
 node *rodar_direita(node *a) {
     node *b = a->esq;
     a->esq = b->dir;
@@ -141,7 +157,7 @@ node *rodar_direita_esquerda(node *a) {
   recursivamente, de baixo para cima, traça-se um caminho pela àrvore,
   até achar-se a ponta ideal para inserir o novo nó (faz-se isso com base
   em comparações de chaves, dado o fato da AVL ser uma ABB), ponto em que
-  as chamadas recursivas vão sendofinalizadas, rotacionando a àrvore conforme
+  as chamadas recursivas vão sendo finalizadas, rotacionando a àrvore conforme
   for necessário no caminho inverso à ida (bottom -> up) para rebalanceá-la;
 */
 node *avl_inserir_no(node *raiz, int chave, avl *T) {
@@ -155,7 +171,10 @@ node *avl_inserir_no(node *raiz, int chave, avl *T) {
     }
 
     //cálculo do novo fb dos nós, a fim de rotacionar conforme necessário;
-    raiz->fb = avl_altura_no(raiz->esq) - avl_altura_no(raiz->dir);
+    int ha = avl_altura_no(raiz->esq);
+    int hb = avl_altura_no(raiz->dir);
+    raiz->altura = 1 + max(ha, hb);
+    raiz->fb = ha - hb;
 
     if (raiz->fb == -2) {
         if (raiz->dir->fb <= 0) {
@@ -246,7 +265,11 @@ node *avl_remover_aux(node **raiz, int chave, avl *T) {
     }
 
     // rebalanceamento necessário no back-tracking pela àrvore;
-    r->fb = avl_altura_no(r->esq) - avl_altura_no(r->dir);
+    int ha = avl_altura_no(r->esq);
+    int hb = avl_altura_no(r->dir);
+    r->altura = 1 + max(ha, hb);
+    r->fb = ha - hb;
+
     if (r->fb == 2) {
         if (r->esq->fb >= 0) {
             *raiz = rodar_direita(r);
@@ -310,12 +333,12 @@ int avl_tamanho(avl *T) {
     return T->tam;
 }
 
+void avl_intersseccao_aux(avl *arvore, node *raiz, avl *inter){
 /*
   temos que percorrer uma árvore (via 'node *raiz') para comparar seus elementos aos
   da outra ('avl *arvore'); para isso, será usada a in-order traversal, por nenhum
   motivo em especial (a post-order e pre-order também percorrem a árvore inteira);
 */
-void avl_intersseccao_aux(avl *arvore, node *raiz, avl *inter){
     if (raiz != NULL) {
         avl_intersseccao_aux(arvore, raiz->esq, inter);
         
